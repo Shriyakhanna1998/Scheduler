@@ -1,0 +1,122 @@
+body {
+  font-family: Georgia; }
+
+.month {
+  display: "block"; }
+
+.day {
+  display: "none"; }
+
+.week {
+  display: "none"; }
+
+#options {
+  padding: 5px;
+  height: 60px;
+  margin-bottom: 20px;
+  background-color: gold; }
+  #options #date {
+    align: center;
+    font-size: 18px; }
+  #options .date-wrapper {
+    display: flex;
+    justify-content: center; }
+
+.time-wrap {
+  height: 40px;
+  margin-left: 20px;
+  margin-right: 20px;
+  font-size: 15px;
+  border-left: 1px solid #ccc; }
+
+.time-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  border-bottom: 1px solid #ccc; }
+  .time-wrapper .time {
+    width: 43px; }
+
+.slot-wrapper {
+  background-color: #ccc;
+  height: 15x;
+  width: 500px;
+  margin: 5px;
+  font-size: 10px; }
+
+#button {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  background-color: transparent;
+  border: none;
+  font-size: 30px;
+  border-radius: 50%;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 30px 30px;
+  cursor: pointer; }
+  #button #add {
+    height: 50px;
+    width: 50px; }
+
+.slot {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: black;
+  background-color: rgba(0, 0, 0, 0.4); }
+  .slot .content {
+    display: flex;
+    justify-content: center;
+    border-radius: 20px;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888; }
+  .slot .close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold; }
+  .slot .close:hover,
+  .slot .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer; }
+
+.row {
+  display: flex;
+  text-align: center; }
+
+.slot_col {
+  background-color: red; }
+
+.row1 {
+  display: flex;
+  height: 25px;
+  text-align: center; }
+
+.column {
+  padding: 10px;
+  width: 14%;
+  height: 500px;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc; }
+
+#addslot form .error {
+  color: red; }
+#addslot form .form-element {
+  margin-top: 20px; }
+  #addslot form .form-element label {
+    display: block; }
+  #addslot form .form-element input {
+    width: 100%; }
+
+/*# sourceMappingURL=styles.css.map */
