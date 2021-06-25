@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(slotRouter)
 app.use(teacherRouter)
+const port = process.env.PORT
 
 app.get('/', (request, response) => {
 	response.render('index.html', { 
@@ -19,6 +20,6 @@ app.get('/', (request, response) => {
 		jsPath: jsPath
 	})
 })
-app.listen(5000, () => {
-	console.log('server is running at port 5000')
+app.listen(port, () => {
+	console.log(`server is running at port ${port}`)
 })

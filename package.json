@@ -4,7 +4,8 @@
   "description": "App to schedule task",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/app.js",
+    "dev": "env-cmd nodemon src/app.js -e js,html,css"
   },
   "author": "Shriya Khanna",
   "license": "ISC",
@@ -14,5 +15,9 @@
     "mysql": "^2.18.1",
     "node-sass": "^6.0.0",
     "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0",
+    "nodemon": "^2.0.7"
   }
 }

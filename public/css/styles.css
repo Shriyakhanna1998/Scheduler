@@ -95,9 +95,6 @@ body {
   display: flex;
   text-align: center; }
 
-.slot_col {
-  background-color: red; }
-
 .row1 {
   display: flex;
   height: 25px;
@@ -118,5 +115,11 @@ body {
     display: block; }
   #addslot form .form-element input {
     width: 100%; }
+
+.slot-col1 {
+  background-color: #ccc;
+  margin-top: 40px;
+  padding: 10px;
+  font-size: 12px; }
 
 /*# sourceMappingURL=styles.css.map */

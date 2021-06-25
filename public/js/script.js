@@ -45,8 +45,9 @@ xhttp.send();
 
 function view() {
 	var value = document.querySelector('#view').value
-	View = value
 	if (value == "day") {
+		View = "day"
+		clearcontent('.day')
 		week = document.querySelector('.week')
 		month = document.querySelector('.month')
 		day = document.querySelector('.day')
@@ -113,6 +114,9 @@ function view() {
 
 	}
 	if (value == "week"){
+		View = "week"
+		console.log(View)
+		clearcontent('.week')
 		week = document.querySelector('.week')
 		month = document.querySelector('.month')
 		day = document.querySelector('.day')
@@ -120,19 +124,22 @@ function view() {
 		week.style.display = "block"
 		month.style.display = "none"
 		document.querySelector('#today1').readOnly=false;
+		var row1_div = document.createElement('div')
+		row1_div.classList.add("row1")
+		var row_div = document.createElement('div')
+		row_div.classList.add("row")
 		var d = new Date()
 		var today = d.getDate()
 		var day = d.getDay()
-		var month = d.getMonth()
+		var month = d.getMonth()+1
 		var list = ["Sunday","Monday","Tuesday","Wednesday ","Thursday","Friday", "Saturday"]
 		for(var i=0; i<7; i++){
-			var column = document.querySelector(".row")
-		    var r = document.querySelector('.row1')
 			var new_row = document.createElement('div')
 			new_row.classList.add("column")
 			var new_col = document.createElement('div')
 			new_col.classList.add("column")
 		    new_col.setAttribute('id', day)
+		    new_col.setAttribute('value', today)
 		    new_col.innerHTML = list[day]
 		    new_row.innerHTML = today
 		    day = (day+1)%7;
@@ -154,9 +161,12 @@ function view() {
 		        }
 		        today++;
 		    }
-		    r.appendChild(new_row);
-			column.appendChild(new_col);
+		    row1_div.appendChild(new_row);
+			row_div.appendChild(new_col);
 		}
+		view_slot_data()
+		document.querySelector('.week').appendChild(row1_div)
+		document.querySelector('.week').appendChild(row_div)
 		document.querySelectorAll('.column').forEach(function(i) {
   			i.addEventListener('click', function(event){
   				day_id = event.target.id;
@@ -165,6 +175,7 @@ function view() {
   		})
   	}
 	if (value == "month"){
+		clearcontent('.month')
 		week = document.querySelector('.week')
 		month = document.querySelector('.month')
 		day = document.querySelector('.day')
@@ -189,7 +200,6 @@ window.onclick = function(event) {
   }
 }
 
-
 setTimeout(function() {
 	document.querySelector('#tid').setAttribute('value', document.querySelector('#teachers').value);
 	view()
@@ -201,6 +211,7 @@ document.querySelector('#teachers').addEventListener('change', function (event) 
 
 
 function submitHandler(event) {
+	console.log(View)
 	event.preventDefault()
 	if (mm < 10) {
 		var date = yyyy + '-' + '0' + mm + '-' + dd
@@ -212,10 +223,9 @@ function submitHandler(event) {
 	var id = document.querySelector('#tid').value
 	var from_time = document.querySelector('#from_time').value
 	var to_time = document.querySelector('#to_time').value
-
+	var todayDate = document.querySelector('#today1').value
 	from_time = todayDate + ' ' + from_time
 	to_time = todayDate + ' ' + to_time
-
 	var xhttp1 = new XMLHttpRequest(); 
 	var count = 0;
 	xhttp1.open("GET", "/validate/slot/"+id+"/"+from_time+"/"+to_time, true);
@@ -298,37 +308,64 @@ xhttp.send();
 }
 
 function view_slot_data(){
-	for (s in slot_data) {
-		id = slot_data[s].SID
-		task = slot_data[s].task
-		f_time = slot_data[s].from_time
-		t_time = slot_data[s].to_time;
-		set_slot(id, task, f_time, t_time)
+	if (View == 'day'){
+		for (s in slot_data) {
+			f_time = slot_data[s].from_time
+			match_date = get_date(f_time)
+			if(match_date == todayDate.slice(8, 10)){
+				t_time = slot_data[s].to_time;
+				id = slot_data[s].SID
+				task = slot_data[s].task
+				set_slot(id, task, f_time, t_time)
+			}
+		}
+	}
+	if (View == 'week'){
+		var day = new Date()
+		day_id = day.getDay()
+		setTimeout(function(){
+			for (s in slot_data) {
+				console.log(day_id)
+				g = document.getElementById(day_id).value
+				console.log(g)
+				f_time = slot_data[s].from_time
+				match_date = get_date(f_time)
+				t_time = slot_data[s].to_time;
+				id = slot_data[s].SID
+				task = slot_data[s].task
+				set_slot(id, task, f_time, t_time)
+				if(day_id == 6){
+					day_id = -1
+				}
+				day_id++;
+			}
+		}, 500)
 	}
 }
-
 function set_slot(id, task, f_time, t_time) {
 	d = convertDate(f_time)
 	time_id = d.slice(0, 2)
 	t = convertDate(t_time)
 	var batch = document.createElement("div");
-	if(View = "day"){
+	if(View == "day"){
 			batch.classList.add('slot-wrapper')
 			batch.setAttribute('id', id)
 			s_slot = document.getElementById(time_id)
 			batch.innerHTML = "Lecture of "+task+" at "+d+" till "+t;
 			s_slot.appendChild(batch);
 		}
-		else{
-			console.log("False")
-		}
-	}
-	if(View == "week"){
-		batch.classList.add('slot-col')
+	if( View == "week"){
+		// console.log(day_id)
+		batch.classList.add('slot-col1')
 		batch.setAttribute('id', id)
 		batch.innerHTML = "Lecture of "+task+" at "+d+" till "+t;
-		document.querySelector("#day_id").appendChild(batch);
+		document.getElementById(day_id).appendChild(batch);
 	}
+	else
+	{
+		console.log()
+	}
+}
 function error(message){
 	document.querySelector(".error").innerHTML = message
 }
@@ -349,4 +386,11 @@ function formatTime(time) {
 	hours = hours < 10 ? '0' + hours : hours
 	minutes = minutes < 10 ? '0' + minutes : minutes
 	return hours + ':' + minutes
+}
+function clearcontent(clear_id) {
+    document.querySelector(clear_id).innerHTML = "";
+    }
+function get_date(x){
+	x = x.slice(8, 10)
+	return x
 }
