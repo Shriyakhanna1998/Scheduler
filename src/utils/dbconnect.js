@@ -1,9 +1,10 @@
 const mysql = require('mysql')
 const connection = mysql.createConnection({
-	host: process.env.RDS_HOSTNAME,
-	user: process.env.RDS_USERNAME,
-	password: process.env.RDS_PASSWORD,
-	port: process.env.RDS_PORT
+	host: process.env.DB_HOST,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASS,
+	port: process.env.DB_PORT,
+	database:process.env.DB_NAME
 })
 connection.connect(function(err) {
   if (err) {
