@@ -2,7 +2,7 @@ body {
   font-family: Georgia; }
 
 .month {
-  display: "none"; }
+  display: none; }
 
 .day {
   display: "block"; }
@@ -123,11 +123,6 @@ body {
       margin-left: 45px;
       background-color: #f44336;
       color: white;
-      margin-top: 5px;
-      width: 100px; }
-    #addslot form .form-element .form_buttons #Cancel {
-      margin-left: 45px;
-      background-color: #ccc;
       margin-top: 5px;
       width: 100px; }
 

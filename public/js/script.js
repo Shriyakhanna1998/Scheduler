@@ -46,8 +46,8 @@ xhttp.send();
 }
 
 function view() {
-	clearcontent("#teachers")
 	get_all_data()
+	clearcontent("#teachers")
 	var value = document.querySelector('#view').value
 	if (value == "day") {
 		View = "day"
@@ -124,7 +124,6 @@ function view() {
 
 	}
 	if (value == "week"){
-		clearcontent("#teachers")
 		clearcontent('.week')
 		View = "week"
 		week = document.querySelector('.week')
@@ -186,6 +185,35 @@ function view() {
 				openModal();
 			})
   		})
+  		setTimeout(function(){
+  			console.log(document.querySelector('.slot-col1'))
+  			document.querySelectorAll('.slot-col1').forEach((item) => {
+			item.addEventListener('click', function (event) {
+				var sid = event.target.id
+				e = document.getElementById(event.target.id)
+				var xhttp1 = new XMLHttpRequest();      
+				xhttp1.open("GET", "/get-slot/"+sid, true);
+				xhttp1.onreadystatechange = function() {
+					if(this.readyState == 4 && this.status == 200){
+						var result = JSON.parse(this.responseText)
+						var from_time = formatTime(result[0].from_time)
+						var to_time = formatTime(result[0].to_time)
+						document.getElementById('task').setAttribute('value', result[0].task)
+						document.getElementById('from_time').setAttribute('value', from_time)
+		  				document.getElementById('to_time').setAttribute('value', to_time)
+		  				enable()
+		  				e = document.getElementById(event.target.id)
+		  				del_button = document.querySelector('#Dbutton')
+		  				del_button.onclick = function(){
+		  					Delete(sid, e)
+		  				}
+		  				openModal()
+					}
+				}
+				xhttp1.send()
+			})
+		})
+  	}, 500)
   	}
 	if (value == "month"){
 		clearcontent('.month')
@@ -390,7 +418,6 @@ function set_slot(id, task, f_time, t_time) {
 			s_slot.appendChild(batch);
 		}
 	if( View == "week"){
-		console.log(day_id)
 		batch.classList.add('slot-col1')
 		batch.setAttribute('id', id)
 		batch.innerHTML = "Lecture of "+task+" at "+d+" till "+t;
@@ -407,12 +434,17 @@ function error(message){
 }
 
 function openModal() {
+	addslot.style.display = "block"
 	document.querySelector('.error').innerHTML = ''
     addslot.style.display = "flex"
 }
 
 function closeModal() {
+	document.getElementById('task').setAttribute('value', "")
+	document.getElementById('from_time').setAttribute('value', "")
+	document.getElementById('to_time').setAttribute('value', "")
 	addslot.style.display = "none"
+
 }
 
 function formatTime(time) {
@@ -438,28 +470,26 @@ function rev(str) {
     return newString;
 }
 function disable() {
-    document.getElementById("Dbutton").disabled = true;
+    document.getElementById("Dbutton").style.disable = true;
+    document.getElementById("Dbutton").style.display = "none";
 }
 
 function enable() {
     document.getElementById("Dbutton").disabled = false;
+    document.getElementById("Dbutton").style.display = "block";
 }
 function Delete(sid, e){
 	e.innerHTML = ""
 	const xhttp_del = new XMLHttpRequest()
 	xhttp_del.open("DELETE", '/delete/slot/'+sid, true);
 	xhttp_del.onload = function() {
-	if(this.status == 200){
-		closeModal()
+		if(this.status == 200){
+			closeModal()
+		}
+		else{
+			console.log("File not found")
+		}
 	}
-	else{
-		console.log("File not found")
-	}
-}
-xhttp_del.send();
-get_all_data()
-}
-
-function cancel(){
-	closeModal()
+	xhttp_del.send();
+	get_all_data()
 }

@@ -5,13 +5,13 @@ body {
 }
 
 .month{
-	display: "none";
+	display: none;
 }
 .day{
-	display: "block";
+	display: block;
 }
 .week{
-	display:"none";
+	display:none;
 	display:flex;
 	flex-direction: row;
 	.row {
@@ -146,12 +146,6 @@ body {
 				margin-left: 45px;
 				background-color: #f44336;
 				color: white;
-				margin-top: 5px;
-				width : 100px;
-				}
-				#Cancel{
-				margin-left: 45px;
-				background-color: #ccc;
 				margin-top: 5px;
 				width : 100px;
 				}
