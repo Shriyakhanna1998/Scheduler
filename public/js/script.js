@@ -93,7 +93,6 @@ function view() {
 		document.querySelectorAll('.slot-wrapper').forEach((item) => {
 			item.addEventListener('click', function (event) {
 				var sid = event.target.id
-				console.log(event.target.id)
 				var xhttp1 = new XMLHttpRequest();
 				xhttp1.open("GET", "/get-slot/"+sid, true);
 				xhttp1.onreadystatechange = function() {
@@ -115,7 +114,6 @@ function view() {
 	}
 	if (value == "week"){
 		View = "week"
-		console.log(View)
 		clearcontent('.week')
 		week = document.querySelector('.week')
 		month = document.querySelector('.month')
@@ -211,7 +209,6 @@ document.querySelector('#teachers').addEventListener('change', function (event) 
 
 
 function submitHandler(event) {
-	console.log(View)
 	event.preventDefault()
 	if (mm < 10) {
 		var date = yyyy + '-' + '0' + mm + '-' + dd
@@ -224,6 +221,9 @@ function submitHandler(event) {
 	var from_time = document.querySelector('#from_time').value
 	var to_time = document.querySelector('#to_time').value
 	var todayDate = document.querySelector('#today1').value
+	var td = new Date(todayDate)
+	td = td.getDay()
+	day_id = td
 	from_time = todayDate + ' ' + from_time
 	to_time = todayDate + ' ' + to_time
 	var xhttp1 = new XMLHttpRequest(); 
@@ -311,9 +311,10 @@ function view_slot_data(){
 	if (View == 'day'){
 		for (s in slot_data) {
 			f_time = slot_data[s].from_time
-			match_date = get_date(f_time)
-			if(match_date == todayDate.slice(8, 10)){
-				t_time = slot_data[s].to_time;
+			var d = new Date(f_time);
+			var match_date = get_date(d.toString())
+			t_time = slot_data[s].to_time;
+			if(match_date == todayDate.slice(8,10)){
 				id = slot_data[s].SID
 				task = slot_data[s].task
 				set_slot(id, task, f_time, t_time)
@@ -321,23 +322,32 @@ function view_slot_data(){
 		}
 	}
 	if (View == 'week'){
+		var c = 0;
 		var day = new Date()
 		day_id = day.getDay()
 		setTimeout(function(){
-			for (s in slot_data) {
-				console.log(day_id)
-				g = document.getElementById(day_id).value
-				console.log(g)
-				f_time = slot_data[s].from_time
-				match_date = get_date(f_time)
-				t_time = slot_data[s].to_time;
-				id = slot_data[s].SID
-				task = slot_data[s].task
-				set_slot(id, task, f_time, t_time)
+			while(c < 7){
+				for (s in slot_data) {
+					cdate = document.getElementById(day_id)
+					cdate = cdate.getAttribute('value')
+					if(cdate < 10){
+						cdate = '0'+cdate
+					}
+					f_time = slot_data[s].from_time
+					var d = new Date(f_time);
+					var match_date = get_date(d.toString())
+					if(match_date == cdate){
+						t_time = slot_data[s].to_time;
+						id = slot_data[s].SID
+						task = slot_data[s].task
+						set_slot(id, task, f_time, t_time)
+					}
+				}
 				if(day_id == 6){
 					day_id = -1
 				}
 				day_id++;
+				c++;
 			}
 		}, 500)
 	}
@@ -355,10 +365,11 @@ function set_slot(id, task, f_time, t_time) {
 			s_slot.appendChild(batch);
 		}
 	if( View == "week"){
-		// console.log(day_id)
+		console.log(day_id)
 		batch.classList.add('slot-col1')
 		batch.setAttribute('id', id)
 		batch.innerHTML = "Lecture of "+task+" at "+d+" till "+t;
+		//console.log(document.getElementById(day_id))
 		document.getElementById(day_id).appendChild(batch);
 	}
 	else
@@ -392,5 +403,12 @@ function clearcontent(clear_id) {
     }
 function get_date(x){
 	x = x.slice(8, 10)
-	return x
+	return(x)
+}
+function rev(str) {
+    let newString = "";
+    for (let i = str.length - 1; i >= 0; i--) {
+        newString += str[i];
+    }
+    return newString;
 }
