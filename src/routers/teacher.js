@@ -59,8 +59,8 @@ router.patch('/update/teacher/:id', (req, res) =>{
 router.delete('/delete/:id', (req, res) =>{
 	const id = req.params.id
 	const options = {
-		host: 'localhost',
-		port: '5000',
+		host: process.env.DB_HOST,
+		port: process.env.PORT,
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json'
