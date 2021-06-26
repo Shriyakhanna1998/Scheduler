@@ -289,7 +289,7 @@ function submitHandler(event) {
 	xhttp1.onreadystatechange = function() {
 		if(this.readyState == 4 && this.status == 200){
 			var results = JSON.parse(this.responseText);
-			if ((results.result).length > 0) {
+			if (results.result !== null) {
 				for (resu in results.result) {
 					if (id == results.result[resu].TEACHER_ID) {
 						count++;
