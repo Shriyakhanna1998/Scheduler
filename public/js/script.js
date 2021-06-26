@@ -2,6 +2,7 @@ let slot_data;
 let View;
 let day_id;
 
+get_all_data()
 
 today = new Date();
 var dd = today.getDate();
@@ -14,10 +15,10 @@ date = document.querySelector('#date')
 date.innerHTML = curdate
 
 
-
-const xhttp = new XMLHttpRequest();
-xhttp.open("GET", "/all/teacher", true);
-xhttp.onload = function() {
+function get_all_data(){
+	const xhttp = new XMLHttpRequest();
+	xhttp.open("GET", "/all/teacher", true);
+	xhttp.onload = function() {
 	if(this.status == 200){
 		var result = JSON.parse(this.responseText);
 		for (res in result.result) {
@@ -42,8 +43,11 @@ xhttp.onload = function() {
 xhttp.send();
 }
 xhttp.send();
+}
 
 function view() {
+	clearcontent("#teachers")
+	get_all_data()
 	var value = document.querySelector('#view').value
 	if (value == "day") {
 		View = "day"
@@ -86,6 +90,7 @@ function view() {
 	  				to_time = to_time < 10 ? '0' + to_time + ':00' : to_time + ':00'
 	  				document.getElementById('from_time').setAttribute('value', from_time)
 	  				document.getElementById('to_time').setAttribute('value', to_time)
+	  				disable()
 	  				openModal()
   				}
 			})
@@ -103,6 +108,12 @@ function view() {
 						document.getElementById('task').setAttribute('value', result[0].task)
 						document.getElementById('from_time').setAttribute('value', from_time)
 		  				document.getElementById('to_time').setAttribute('value', to_time)
+		  				enable()
+		  				e = document.getElementById(event.target.id)
+		  				del_button = document.querySelector('#Dbutton')
+		  				del_button.onclick = function(){
+		  					Delete(sid, e)
+		  				}
 		  				openModal()
 					}
 				}
@@ -113,8 +124,9 @@ function view() {
 
 	}
 	if (value == "week"){
-		View = "week"
+		clearcontent("#teachers")
 		clearcontent('.week')
+		View = "week"
 		week = document.querySelector('.week')
 		month = document.querySelector('.month')
 		day = document.querySelector('.day')
@@ -162,12 +174,15 @@ function view() {
 		    row1_div.appendChild(new_row);
 			row_div.appendChild(new_col);
 		}
+		document.querySelector('.week').appendChild(row_div)
+		document.querySelector('.week').appendChild(row1_div)
 		view_slot_data()
 		document.querySelector('.week').appendChild(row1_div)
 		document.querySelector('.week').appendChild(row_div)
 		document.querySelectorAll('.column').forEach(function(i) {
   			i.addEventListener('click', function(event){
   				day_id = event.target.id;
+  				disable()
 				openModal();
 			})
   		})
@@ -182,11 +197,14 @@ function view() {
 		month.style.display = "block"
 	}
 }
+
+
 var addslot = document.getElementById('addslot')
 var button = document.getElementById('button')
 var close = document.querySelector('.close')
 button.onclick = function() {
 	document.getElementById('today1').setAttribute('value', todayDate)
+	disable()
 	openModal()
 }
 close.onclick = function(){
@@ -267,9 +285,9 @@ function submitHandler(event) {
 			"teacher_id": id
 		}
 
-		xhttp.open("POST", "/slot/schedule", true);
-		xhttp.setRequestHeader('Content-Type','application/json')
-		xhttp.onload = function() {
+		xhttp1.open("POST", "/slot/schedule", true);
+		xhttp1.setRequestHeader('Content-Type','application/json')
+		xhttp1.onload = function() {
 			if(this.status == 200){
 				var result = JSON.parse(this.responseText);
 				if(result.affectRows == 1) {
@@ -279,7 +297,7 @@ function submitHandler(event) {
 
 			}
 		}
-		xhttp.send(JSON.stringify(json));
+		xhttp1.send(JSON.stringify(json));
 	}, 1000)
 }
 
@@ -289,11 +307,18 @@ function convertDate(time){
 	d = d.slice(16, 21)
 	return(d);
 }
+
+xhttp2 = new XMLHttpRequest()
 function teach(){
-	document.querySelectorAll('.slot-wrapper').forEach(e => e.parentNode.removeChild(e));
+	if(View == 'day'){
+		document.querySelectorAll('.slot-wrapper').forEach(e => e.parentNode.removeChild(e));
+	}
+	if(View == 'week'){
+		document.querySelectorAll('.slot-col1').forEach(e => e.remove());
+	}
 	var teacher_value = document.getElementById('teachers').value
-	xhttp.open("GET", "/slot/"+teacher_value, true);
-	xhttp.onload = function() {
+	xhttp2.open("GET", "/slot/"+teacher_value, true);
+	xhttp2.onload = function() {
 	if(this.status == 200){
 		var result = JSON.parse(this.responseText);
 		slot_data = result;
@@ -304,7 +329,7 @@ function teach(){
 		console.log("File not found")
 	}
 }
-xhttp.send();
+xhttp2.send();
 }
 
 function view_slot_data(){
@@ -411,4 +436,30 @@ function rev(str) {
         newString += str[i];
     }
     return newString;
+}
+function disable() {
+    document.getElementById("Dbutton").disabled = true;
+}
+
+function enable() {
+    document.getElementById("Dbutton").disabled = false;
+}
+function Delete(sid, e){
+	e.innerHTML = ""
+	const xhttp_del = new XMLHttpRequest()
+	xhttp_del.open("DELETE", '/delete/slot/'+sid, true);
+	xhttp_del.onload = function() {
+	if(this.status == 200){
+		closeModal()
+	}
+	else{
+		console.log("File not found")
+	}
+}
+xhttp_del.send();
+get_all_data()
+}
+
+function cancel(){
+	closeModal()
 }

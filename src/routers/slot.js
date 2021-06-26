@@ -59,9 +59,23 @@ router.patch('/update/slot/:id', (req, res) =>{
 	})
 })
 
-router.delete('/delete/slot/:id', (req, res) =>{
+router.delete('/delete/teacher_slot/:id', (req, res) =>{
 	const id = req.params.id
 	connection.query(`DELETE FROM slot WHERE TEACHER_ID=${id}`, (error, result, field) =>{
+		if(error){
+			return res.json({
+				error: error.sqlMessage
+			})
+		}
+		res.json({
+			affectedRows: result.affectedRows
+		})
+	})
+})
+
+router.delete('/delete/slot/:sid', (req, res) =>{
+	const sid = req.params.sid
+	connection.query(`DELETE FROM slot WHERE SID=${sid}`, (error, result, field) =>{
 		if(error){
 			return res.json({
 				error: error.sqlMessage

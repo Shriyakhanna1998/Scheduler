@@ -10,8 +10,8 @@
 		<div class="date-wrapper">
 			<div id="date"></div>
 		</div>
-		<select id="teachers" onchange="teach()">
-		</select>
+  		<select id="teachers" onchange="teach()">
+  		</select>
 		<select id="view" onchange="view()">
 			<option value = "day">Day</option>
 			<option value = "week">Week</option>
@@ -46,7 +46,11 @@
   					<input type="time" id="to_time" name="to_time" required>
   				</div>
   				<div class="form-element">
-  					<input type="submit">
+            <div class="form_buttons">
+              <input type="submit">
+              <input type="button" value="Delete" id= "Dbutton">
+              <input type="button" value="Cancel" id= "Cancel" onclick="cancel()">
+            </div>
   				</div>
   				<input type="hidden" id="tid" name="teacher_id">
   			</form>
