@@ -226,6 +226,14 @@ function view() {
 		day.style.display = "none"
 		week.style.display = "none"
 		month.style.display = "block"
+		document.querySelectorAll('.calendar-wrapper .days div div').forEach((item) => {
+		item.addEventListener('click', function () {
+		var slot_area = document.createElement('div')
+		slot_area.classList.add('slot-area')
+		slot_area.innerHTML = 'title'
+		item.querySelector('.slot0').appendChild(slot_area)
+	});
+});
 	}
 }
 
@@ -496,12 +504,3 @@ function Delete(sid, e){
 	xhttp_del.send();
 	get_all_data()
 }
-
-document.querySelectorAll('.calendar-wrapper .days div div').forEach((item) => {
-	item.addEventListener('click', function () {
-		var slot_area = document.createElement('div')
-		slot_area.classList.add('slot-area')
-		slot_area.innerHTML = 'title'
-		item.querySelector('.slot0').appendChild(slot_area)
-	});
-});
