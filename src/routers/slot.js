@@ -102,5 +102,4 @@ router.get('/validate/slot/:teacher_id/:from/:to', (req, res) =>{
 		})
 	})
 })
-
 module.exports = router

@@ -52,6 +52,7 @@ function view() {
 	if (value == "day") {
 		View = "day"
 		clearcontent('.day')
+		document.querySelector('#date').innerHTML = curdate
 		week = document.querySelector('.week')
 		month = document.querySelector('.month')
 		day = document.querySelector('.day')
@@ -126,6 +127,7 @@ function view() {
 	if (value == "week"){
 		clearcontent('.week')
 		View = "week"
+		document.querySelector('#date').innerHTML = "Jun 2021"
 		week = document.querySelector('.week')
 		month = document.querySelector('.month')
 		day = document.querySelector('.day')
@@ -198,6 +200,7 @@ function view() {
 						var result = JSON.parse(this.responseText)
 						var from_time = formatTime(result[0].from_time)
 						var to_time = formatTime(result[0].to_time)
+						document.getElementById('today1').setAttribute('value', '')
 						document.getElementById('task').setAttribute('value', result[0].task)
 						document.getElementById('from_time').setAttribute('value', from_time)
 		  				document.getElementById('to_time').setAttribute('value', to_time)
@@ -216,7 +219,7 @@ function view() {
   	}, 500)
   	}
 	if (value == "month"){
-		clearcontent('.month')
+		document.querySelector('#date').innerHTML = "Jun 2021"
 		week = document.querySelector('.week')
 		month = document.querySelector('.month')
 		day = document.querySelector('.day')
